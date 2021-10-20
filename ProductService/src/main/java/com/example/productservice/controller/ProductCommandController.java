@@ -5,20 +5,20 @@ import com.example.productservice.model.product.CreateProductRestModel;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
-public class ProductController {
-
-    private final Environment env;
+public class ProductCommandController {
     private final CommandGateway commandGateway;
 
     @Autowired
-    public ProductController(Environment env, CommandGateway commandGateway) {
-        this.env = env;
+    public ProductCommandController(CommandGateway commandGateway) {
         this.commandGateway = commandGateway;
     }
 
@@ -39,20 +39,5 @@ public class ProductController {
             returnValue = ex.getLocalizedMessage();
         }
         return returnValue;
-    }
-
-    @GetMapping
-    public String getProduct() {
-        return "HTTP Get Handler " + env.getProperty("local.server.port");
-    }
-
-    @PutMapping
-    public String updateProduct() {
-        return "HTTP Put Handler " + env.getProperty("local.server.port");
-    }
-
-    @DeleteMapping("{id}")
-    public String deleteProduct(@PathVariable String id) {
-        return "HTTP Del Handler " + id + " " + env.getProperty("local.server.port");
     }
 }
