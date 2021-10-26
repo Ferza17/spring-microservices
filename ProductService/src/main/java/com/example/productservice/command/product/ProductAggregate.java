@@ -1,4 +1,4 @@
-package com.example.productservice.command;
+package com.example.productservice.command.product;
 
 import com.example.productservice.event.ProductCreateEvent;
 import org.axonframework.commandhandling.CommandHandler;
@@ -23,7 +23,7 @@ public class ProductAggregate {
     }
 
     @CommandHandler
-    public ProductAggregate(CreateProductCommand createProductCommand) {
+    public ProductAggregate(CreateProductCommand createProductCommand) throws Exception {
         if (createProductCommand.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Price Cannot be less or equal than zero");
         }
@@ -36,6 +36,7 @@ public class ProductAggregate {
         BeanUtils.copyProperties(createProductCommand, productCreateEvent);
 
         AggregateLifecycle.apply(productCreateEvent);
+        
     }
 
     @EventSourcingHandler

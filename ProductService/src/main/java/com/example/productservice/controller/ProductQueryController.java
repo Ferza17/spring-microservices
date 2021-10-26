@@ -1,6 +1,5 @@
 package com.example.productservice.controller;
 
-import com.example.productservice.model.product.CreateProductRestModel;
 import com.example.productservice.model.product.ProductRestModel;
 import com.example.productservice.query.FindProductQuery;
 import org.axonframework.messaging.responsetypes.ResponseTypes;

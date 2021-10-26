@@ -1,8 +1,8 @@
 package com.example.productservice.query;
 
-import com.example.productservice.entity.ProductEntity;
+import com.example.productservice.entity.product.ProductEntity;
 import com.example.productservice.model.product.ProductRestModel;
-import com.example.productservice.repository.ProductRepository;
+import com.example.productservice.repository.product.ProductRepository;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
