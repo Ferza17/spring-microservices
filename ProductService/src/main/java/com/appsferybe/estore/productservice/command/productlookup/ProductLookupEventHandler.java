@@ -1,11 +1,10 @@
-package com.example.productservice.command.productlookup;
+package com.appsferybe.estore.productservice.command.productlookup;
 
-import com.example.productservice.entity.productlookup.ProductLookupEntity;
-import com.example.productservice.event.ProductCreateEvent;
-import com.example.productservice.repository.productlookup.ProductLookupRepository;
+import com.appsferybe.estore.productservice.repository.productlookup.ProductLookupRepository;
+import com.appsferybe.estore.productservice.entity.productlookup.ProductLookupEntity;
+import com.appsferybe.estore.productservice.event.ProductCreateEvent;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 

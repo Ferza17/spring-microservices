@@ -1,11 +1,9 @@
-package com.example.productservice;
+package com.appsferybe.estore.productservice;
 
-import com.example.productservice.command.product.CreateProductCommandInterceptor;
-import com.example.productservice.command.product.ProductEventErrorHandler;
+import com.appsferybe.estore.productservice.command.product.CreateProductCommandInterceptor;
+import com.appsferybe.estore.productservice.command.product.ProductEventErrorHandler;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.config.EventProcessingConfigurer;
-import org.axonframework.eventhandling.PropagatingErrorHandler;
-import org.axonframework.springboot.autoconfig.EventProcessingAutoConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

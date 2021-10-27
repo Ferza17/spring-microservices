@@ -1,8 +1,8 @@
-package com.example.productservice.query;
+package com.appsferybe.estore.productservice.query;
 
-import com.example.productservice.entity.product.ProductEntity;
-import com.example.productservice.model.product.ProductRestModel;
-import com.example.productservice.repository.product.ProductRepository;
+import com.appsferybe.estore.productservice.entity.product.ProductEntity;
+import com.appsferybe.estore.productservice.model.product.ProductRestModel;
+import com.appsferybe.estore.productservice.repository.product.ProductRepository;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
-package com.example.productservice.controller;
+package com.appsferybe.estore.productservice.controller;
 
-import com.example.productservice.model.product.ProductRestModel;
-import com.example.productservice.query.FindProductQuery;
+import com.appsferybe.estore.productservice.query.FindProductQuery;
+import com.appsferybe.estore.productservice.model.product.ProductRestModel;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;

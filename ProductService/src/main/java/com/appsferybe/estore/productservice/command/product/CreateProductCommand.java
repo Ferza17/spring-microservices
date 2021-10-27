@@ -1,4 +1,4 @@
-package com.example.productservice.command.product;
+package com.appsferybe.estore.productservice.command.product;
 
 import lombok.Builder;
 import lombok.Data;

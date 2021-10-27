@@ -1,4 +1,4 @@
-package com.example.productservice.model.product;
+package com.appsferybe.estore.productservice.model.product;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.example.productservice.entity.productlookup;
+package com.appsferybe.estore.productservice.entity.productlookup;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

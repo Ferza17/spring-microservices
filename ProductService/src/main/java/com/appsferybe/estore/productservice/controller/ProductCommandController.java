@@ -1,7 +1,7 @@
-package com.example.productservice.controller;
+package com.appsferybe.estore.productservice.controller;
 
-import com.example.productservice.command.product.CreateProductCommand;
-import com.example.productservice.model.product.CreateProductRestModel;
+import com.appsferybe.estore.productservice.command.product.CreateProductCommand;
+import com.appsferybe.estore.productservice.model.product.CreateProductRestModel;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

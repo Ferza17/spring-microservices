@@ -1,6 +1,6 @@
-package com.example.productservice.command.product;
+package com.appsferybe.estore.productservice.command.product;
 
-import com.example.productservice.model.error.ErrorMassageModel;
+import com.appsferybe.estore.productservice.model.error.ErrorMassageModel;
 import org.axonframework.commandhandling.CommandExecutionException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

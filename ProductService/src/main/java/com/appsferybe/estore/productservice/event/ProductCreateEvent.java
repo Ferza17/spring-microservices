@@ -1,4 +1,4 @@
-package com.example.productservice.event;
+package com.appsferybe.estore.productservice.event;
 
 import lombok.Data;
 

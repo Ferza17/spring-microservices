@@ -1,4 +1,4 @@
-package com.example.productservice.model.error;
+package com.appsferybe.estore.productservice.model.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

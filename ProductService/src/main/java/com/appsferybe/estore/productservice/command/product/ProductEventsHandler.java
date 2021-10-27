@@ -1,8 +1,8 @@
-package com.example.productservice.command.product;
+package com.appsferybe.estore.productservice.command.product;
 
-import com.example.productservice.entity.product.ProductEntity;
-import com.example.productservice.event.ProductCreateEvent;
-import com.example.productservice.repository.product.ProductRepository;
+import com.appsferybe.estore.productservice.repository.product.ProductRepository;
+import com.appsferybe.estore.productservice.entity.product.ProductEntity;
+import com.appsferybe.estore.productservice.event.ProductCreateEvent;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.messaging.interceptors.ExceptionHandler;

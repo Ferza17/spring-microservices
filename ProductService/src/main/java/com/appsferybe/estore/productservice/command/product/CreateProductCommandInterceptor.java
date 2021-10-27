@@ -1,7 +1,7 @@
-package com.example.productservice.command.product;
+package com.appsferybe.estore.productservice.command.product;
 
-import com.example.productservice.entity.productlookup.ProductLookupEntity;
-import com.example.productservice.repository.productlookup.ProductLookupRepository;
+import com.appsferybe.estore.productservice.entity.productlookup.ProductLookupEntity;
+import com.appsferybe.estore.productservice.repository.productlookup.ProductLookupRepository;
 import com.sun.org.slf4j.internal.Logger;
 import com.sun.org.slf4j.internal.LoggerFactory;
 import org.axonframework.commandhandling.CommandMessage;

@@ -1,6 +1,6 @@
-package com.example.productservice.command.product;
+package com.appsferybe.estore.productservice.command.product;
 
-import com.example.productservice.event.ProductCreateEvent;
+import com.appsferybe.estore.productservice.event.ProductCreateEvent;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
