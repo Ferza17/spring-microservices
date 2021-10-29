@@ -2,8 +2,6 @@ package com.appsferybe.estore.productservice.command.product;
 
 import com.appsferybe.estore.productservice.entity.productlookup.ProductLookupEntity;
 import com.appsferybe.estore.productservice.repository.productlookup.ProductLookupRepository;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
 import org.axonframework.commandhandling.CommandMessage;
 import org.axonframework.messaging.MessageDispatchInterceptor;
 import org.springframework.stereotype.Component;
@@ -13,7 +11,7 @@ import java.util.function.BiFunction;
 
 @Component
 public class CreateProductCommandInterceptor implements MessageDispatchInterceptor<CommandMessage<?>> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreateProductCommandInterceptor.class);
+
     private final ProductLookupRepository productLookupRepository;
 
     public CreateProductCommandInterceptor(ProductLookupRepository productLookupRepository) {
@@ -28,7 +26,6 @@ public class CreateProductCommandInterceptor implements MessageDispatchIntercept
     @Override
     public BiFunction<Integer, CommandMessage<?>, CommandMessage<?>> handle(List<? extends CommandMessage<?>> messages) {
         return (index, command) -> {
-            LOGGER.debug("Intercepted command : " + command.getPayload());
 
             if (CreateProductCommand.class.equals(command.getPayloadType())) {
 

@@ -1,6 +1,10 @@
 package com.appsferybe.estore.OrdersService.saga;
 
 import com.appsferybe.estore.OrdersService.core.events.OrderCreatedEvent;
+import com.appsferybe.estore.core.commands.ReserveProductCommand;
+import org.axonframework.commandhandling.CommandCallback;
+import org.axonframework.commandhandling.CommandMessage;
+import org.axonframework.commandhandling.CommandResultMessage;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.modelling.saga.SagaEventHandler;
 import org.axonframework.modelling.saga.StartSaga;
@@ -15,5 +19,20 @@ public class OrderSaga {
     @StartSaga
     @SagaEventHandler(associationProperty = "orderId")
     public void handle(OrderCreatedEvent orderCreatedEvent) {
+        ReserveProductCommand reserveProductCommand = ReserveProductCommand.builder()
+                .orderId(orderCreatedEvent.getOrderId())
+                .productId(orderCreatedEvent.getProductId())
+                .quantity(orderCreatedEvent.getQuantity())
+                .userId(orderCreatedEvent.getUserId())
+                .build();
+
+        commandGateway.send(reserveProductCommand, new CommandCallback<ReserveProductCommand, Object>() {
+            @Override
+            public void onResult(CommandMessage<? extends ReserveProductCommand> commandMessage, CommandResultMessage<?> commandResultMessage) {
+                if (commandResultMessage.isExceptional()) {
+                    // Start Compensating transaction
+                }
+            }
+        });
     }
 }
