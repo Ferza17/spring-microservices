@@ -1,11 +1,14 @@
 package com.appsferybe.estore.productservice.command.product;
 
+import com.appsferybe.estore.core.events.ProductReservedEvent;
 import com.appsferybe.estore.productservice.repository.product.ProductRepository;
 import com.appsferybe.estore.productservice.entity.product.ProductEntity;
 import com.appsferybe.estore.productservice.event.ProductCreateEvent;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.messaging.interceptors.ExceptionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Component;
 @ProcessingGroup("product-group")
 public class ProductEventsHandler {
     private final ProductRepository productRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductEventsHandler.class);
 
 
     public ProductEventsHandler(ProductRepository productRepository) {
@@ -38,5 +42,15 @@ public class ProductEventsHandler {
         } catch (IllegalArgumentException ex) {
             throw new Exception(ex);
         }
+    }
+
+    @EventHandler
+    public void on(ProductReservedEvent productReservedEvent) {
+        ProductEntity productEntity = productRepository.findByProductId(productReservedEvent.getProductId());
+        productEntity.setQuantity(productEntity.getQuantity() - productReservedEvent.getQuantity());
+
+        productRepository.save(productEntity);
+        LOGGER.info("ProductReservedEvent is called for productId: " + productReservedEvent.getProductId() +
+                " and orderId: " + productReservedEvent.getOrderId());
     }
 }

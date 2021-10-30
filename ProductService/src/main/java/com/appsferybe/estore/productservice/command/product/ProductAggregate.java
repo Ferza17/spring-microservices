@@ -1,5 +1,7 @@
 package com.appsferybe.estore.productservice.command.product;
 
+import com.appsferybe.estore.core.commands.ReserveProductCommand;
+import com.appsferybe.estore.core.events.ProductReservedEvent;
 import com.appsferybe.estore.productservice.event.ProductCreateEvent;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -36,7 +38,23 @@ public class ProductAggregate {
         BeanUtils.copyProperties(createProductCommand, productCreateEvent);
 
         AggregateLifecycle.apply(productCreateEvent);
-        
+
+    }
+
+    @CommandHandler
+    public void handle(ReserveProductCommand reserveProductCommand) {
+        if (quantity < reserveProductCommand.getQuantity()) {
+            throw new IllegalArgumentException("Insufficient number of items in stock!");
+        }
+
+        ProductReservedEvent productReservedEvent = ProductReservedEvent.builder()
+                .orderId(reserveProductCommand.getOrderId())
+                .productId(reserveProductCommand.getProductId())
+                .quantity(reserveProductCommand.getQuantity())
+                .userId(reserveProductCommand.getUserId())
+                .build();
+
+        AggregateLifecycle.apply(productReservedEvent);
     }
 
     @EventSourcingHandler
@@ -45,5 +63,10 @@ public class ProductAggregate {
         this.price = productCreateEvent.getPrice();
         this.title = productCreateEvent.getTitle();
         this.quantity = productCreateEvent.getQuantity();
+    }
+
+    @EventSourcingHandler
+    public void on(ProductReservedEvent productReservedEvent) {
+        this.quantity -= productReservedEvent.getQuantity();
     }
 }

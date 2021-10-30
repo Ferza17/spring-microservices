@@ -5,6 +5,8 @@
  */
 package com.appsferybe.estore.OrdersService.command;
 
+import com.appsferybe.estore.OrdersService.command.commands.ApproveOrderCommand;
+import com.appsferybe.estore.OrdersService.core.events.OrderApprovedEvent;
 import com.appsferybe.estore.OrdersService.core.events.OrderCreatedEvent;
 import com.appsferybe.estore.OrdersService.core.model.OrderStatus;
 import com.appsferybe.estore.OrdersService.command.commands.CreateOrderCommand;
@@ -25,7 +27,7 @@ public class OrderAggregate {
     private int quantity;
     private String addressId;
     private OrderStatus orderStatus;
-    
+
     public OrderAggregate() {
     }
 
@@ -33,8 +35,15 @@ public class OrderAggregate {
     public OrderAggregate(CreateOrderCommand createOrderCommand) {
         OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent();
         BeanUtils.copyProperties(createOrderCommand, orderCreatedEvent);
-        
+
         AggregateLifecycle.apply(orderCreatedEvent);
+    }
+
+    @CommandHandler
+    public void handle(ApproveOrderCommand approveOrderCommand) {
+        // Create and Publish the OrderApprovedEvent
+        OrderApprovedEvent orderApprovedEvent = new OrderApprovedEvent(approveOrderCommand.getOrderId());
+        AggregateLifecycle.apply(orderApprovedEvent);
     }
 
     @EventSourcingHandler
@@ -46,6 +55,11 @@ public class OrderAggregate {
         this.quantity = orderCreatedEvent.getQuantity();
         this.orderStatus = orderCreatedEvent.getOrderStatus();
     }
- 
+
+    @EventSourcingHandler
+    public void on(OrderApprovedEvent orderApprovedEvent){
+        this.orderStatus = orderApprovedEvent.getOrderStatus();
+    }
+
 
 }

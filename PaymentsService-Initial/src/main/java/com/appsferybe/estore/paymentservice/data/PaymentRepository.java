@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.appsferybe.estore.OrdersService.core.data;
+package com.appsferybe.estore.paymentservice.data;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrdersRepository extends JpaRepository <OrderEntity, String>{
-    OrderEntity findByOrderId(String orderId);
+public interface PaymentRepository extends JpaRepository <PaymentEntity, String>{
+    
 }
+
