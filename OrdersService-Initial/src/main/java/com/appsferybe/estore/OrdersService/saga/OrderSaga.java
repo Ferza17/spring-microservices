@@ -5,6 +5,8 @@ import com.appsferybe.estore.OrdersService.command.commands.RejectOrderCommand;
 import com.appsferybe.estore.OrdersService.core.events.OrderApprovedEvent;
 import com.appsferybe.estore.OrdersService.core.events.OrderCreatedEvent;
 import com.appsferybe.estore.OrdersService.core.events.OrderRejectedEvent;
+import com.appsferybe.estore.OrdersService.core.model.OrderSummary;
+import com.appsferybe.estore.OrdersService.query.FindOrderQuery;
 import com.appsferybe.estore.core.commands.CancelProductReservationCommand;
 import com.appsferybe.estore.core.commands.ProcessPaymentCommand;
 import com.appsferybe.estore.core.commands.ReserveProductCommand;
@@ -21,6 +23,7 @@ import org.axonframework.modelling.saga.EndSaga;
 import org.axonframework.modelling.saga.SagaEventHandler;
 import org.axonframework.modelling.saga.StartSaga;
 import org.axonframework.queryhandling.QueryGateway;
+import org.axonframework.queryhandling.QueryUpdateEmitter;
 import org.axonframework.spring.stereotype.Saga;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +43,9 @@ public class OrderSaga {
 
     @Autowired
     private transient DeadlineManager deadlineManager;
+
+    @Autowired
+    private transient QueryUpdateEmitter queryUpdateEmitter;
 
     private final String PAYMENT_PROCESSING_TIMEOUT_DEADLINE = "payment-processing-deadline";
 
@@ -93,12 +99,11 @@ public class OrderSaga {
 
         LOGGER.info("Successfully fetched user payment details for user: " + user.getFirstName());
 
-        scheduleId =  deadlineManager.schedule(
+        scheduleId = deadlineManager.schedule(
                 Duration.of(10, ChronoUnit.SECONDS),
                 this.PAYMENT_PROCESSING_TIMEOUT_DEADLINE,
                 productReservedEvent
         );
-
 
 
         ProcessPaymentCommand processPaymentCommand = ProcessPaymentCommand.builder()
@@ -150,8 +155,8 @@ public class OrderSaga {
         commandGateway.send(approveOrderCommand);
     }
 
-    private void cancelDeadline(){
-        if (scheduleId != null){
+    private void cancelDeadline() {
+        if (scheduleId != null) {
             deadlineManager.cancelSchedule(PAYMENT_PROCESSING_TIMEOUT_DEADLINE, scheduleId);
             scheduleId = null;
         }
@@ -172,6 +177,11 @@ public class OrderSaga {
     @SagaEventHandler(associationProperty = "orderId")
     public void handle(OrderRejectedEvent orderRejectedEvent) {
         LOGGER.info("Successfully rejected order with id " + orderRejectedEvent.getOrderId());
+        queryUpdateEmitter.emit(
+                OrderSummary.class,
+                query -> true,
+                new OrderSummary(orderRejectedEvent.getOrderId(), orderRejectedEvent.getOrderStatus(), orderRejectedEvent.getReason())
+        );
     }
 
 
@@ -180,6 +190,11 @@ public class OrderSaga {
     public void handle(OrderApprovedEvent orderApprovedEvent) {
         LOGGER.info("Order is approved, Order Saga is complete for orderId: " + orderApprovedEvent.getOrderId());
 //        SagaLifecycle.end();
+        queryUpdateEmitter.emit(
+                FindOrderQuery.class,
+                query -> true,
+                new OrderSummary(orderApprovedEvent.getOrderId(), orderApprovedEvent.getOrderStatus(), "")
+        );
     }
 
     @DeadlineHandler(deadlineName = PAYMENT_PROCESSING_TIMEOUT_DEADLINE)
