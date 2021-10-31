@@ -1,6 +1,9 @@
 package com.appsferybe.estore.productservice.command.product;
 
+import com.appsferybe.estore.core.commands.CancelProductReservationCommand;
 import com.appsferybe.estore.core.commands.ReserveProductCommand;
+import com.appsferybe.estore.core.events.ProductReservationCancelEvent;
+import com.appsferybe.estore.core.events.ProductReservationCancelledEvent;
 import com.appsferybe.estore.core.events.ProductReservedEvent;
 import com.appsferybe.estore.productservice.event.ProductCreateEvent;
 import org.axonframework.commandhandling.CommandHandler;
@@ -57,6 +60,19 @@ public class ProductAggregate {
         AggregateLifecycle.apply(productReservedEvent);
     }
 
+    @CommandHandler
+    public void handle(CancelProductReservationCommand cancelProductReservationCommand) {
+        ProductReservationCancelledEvent productReservationCancelledEvent = ProductReservationCancelledEvent.builder()
+                .orderId(cancelProductReservationCommand.getOrderId())
+                .productId(cancelProductReservationCommand.getProductId())
+                .quantity(cancelProductReservationCommand.getQuantity())
+                .reason(cancelProductReservationCommand.getReason())
+                .userId(cancelProductReservationCommand.getUserId())
+                .build();
+
+        AggregateLifecycle.apply(productReservationCancelledEvent);
+    }
+
     @EventSourcingHandler
     public void on(ProductCreateEvent productCreateEvent) {
         this.productId = productCreateEvent.getProductId();
@@ -68,5 +84,11 @@ public class ProductAggregate {
     @EventSourcingHandler
     public void on(ProductReservedEvent productReservedEvent) {
         this.quantity -= productReservedEvent.getQuantity();
+    }
+
+    @EventSourcingHandler
+    public void on(ProductReservationCancelledEvent productReservationCancelledEvent) {
+        this.quantity += productReservationCancelledEvent.getQuantity();
+
     }
 }

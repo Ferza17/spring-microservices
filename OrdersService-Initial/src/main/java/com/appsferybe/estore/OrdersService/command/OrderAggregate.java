@@ -6,8 +6,10 @@
 package com.appsferybe.estore.OrdersService.command;
 
 import com.appsferybe.estore.OrdersService.command.commands.ApproveOrderCommand;
+import com.appsferybe.estore.OrdersService.command.commands.RejectOrderCommand;
 import com.appsferybe.estore.OrdersService.core.events.OrderApprovedEvent;
 import com.appsferybe.estore.OrdersService.core.events.OrderCreatedEvent;
+import com.appsferybe.estore.OrdersService.core.events.OrderRejectedEvent;
 import com.appsferybe.estore.OrdersService.core.model.OrderStatus;
 import com.appsferybe.estore.OrdersService.command.commands.CreateOrderCommand;
 import org.axonframework.commandhandling.CommandHandler;
@@ -57,8 +59,23 @@ public class OrderAggregate {
     }
 
     @EventSourcingHandler
-    public void on(OrderApprovedEvent orderApprovedEvent){
+    public void on(OrderApprovedEvent orderApprovedEvent) {
         this.orderStatus = orderApprovedEvent.getOrderStatus();
+    }
+
+    @CommandHandler
+    public void handle(RejectOrderCommand rejectOrderCommand) {
+        OrderRejectedEvent orderRejectedEvent = new OrderRejectedEvent(
+                rejectOrderCommand.getOrderId(),
+                rejectOrderCommand.getReason()
+        );
+
+        AggregateLifecycle.apply(orderRejectedEvent);
+    }
+
+    @EventSourcingHandler
+    public void on(OrderRejectedEvent orderRejectedEvent){
+        this.orderStatus = orderRejectedEvent.getOrderStatus();
     }
 
 

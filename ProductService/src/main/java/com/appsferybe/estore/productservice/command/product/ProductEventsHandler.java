@@ -1,5 +1,7 @@
 package com.appsferybe.estore.productservice.command.product;
 
+import com.appsferybe.estore.core.events.ProductReservationCancelEvent;
+import com.appsferybe.estore.core.events.ProductReservationCancelledEvent;
 import com.appsferybe.estore.core.events.ProductReservedEvent;
 import com.appsferybe.estore.productservice.repository.product.ProductRepository;
 import com.appsferybe.estore.productservice.entity.product.ProductEntity;
@@ -52,5 +54,14 @@ public class ProductEventsHandler {
         productRepository.save(productEntity);
         LOGGER.info("ProductReservedEvent is called for productId: " + productReservedEvent.getProductId() +
                 " and orderId: " + productReservedEvent.getOrderId());
+    }
+
+    @EventHandler
+    public void on(ProductReservationCancelledEvent productReservationCancelledEvent) {
+        ProductEntity currentlyProduct = productRepository.findByProductId(productReservationCancelledEvent.getProductId());
+
+        int newQuantity = currentlyProduct.getQuantity() + productReservationCancelledEvent.getQuantity();
+        currentlyProduct.setQuantity(newQuantity);
+        productRepository.save(currentlyProduct);
     }
 }
