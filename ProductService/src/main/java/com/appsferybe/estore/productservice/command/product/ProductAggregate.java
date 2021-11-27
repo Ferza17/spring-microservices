@@ -15,7 +15,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 
-@Aggregate
+@Aggregate(snapshotTriggerDefinition = "productSnapshotTriggerDefinition")
 public class ProductAggregate {
     @AggregateIdentifier
     private String productId;
@@ -89,6 +89,5 @@ public class ProductAggregate {
     @EventSourcingHandler
     public void on(ProductReservationCancelledEvent productReservationCancelledEvent) {
         this.quantity += productReservationCancelledEvent.getQuantity();
-
     }
 }
