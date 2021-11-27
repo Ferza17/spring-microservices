@@ -8,6 +8,7 @@ import com.appsferybe.estore.productservice.entity.product.ProductEntity;
 import com.appsferybe.estore.productservice.event.ProductCreateEvent;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.eventhandling.ResetHandler;
 import org.axonframework.messaging.interceptors.ExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,5 +64,10 @@ public class ProductEventsHandler {
         int newQuantity = currentlyProduct.getQuantity() + productReservationCancelledEvent.getQuantity();
         currentlyProduct.setQuantity(newQuantity);
         productRepository.save(currentlyProduct);
+    }
+
+    @ResetHandler
+    public void reset() {
+        productRepository.deleteAll();
     }
 }
